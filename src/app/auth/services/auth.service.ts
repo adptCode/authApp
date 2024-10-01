@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { AuthStatus, LoginResponse, User } from '../interfaces';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthService {
   private _authStatus = signal<AuthStatus>( AuthStatus.checking );
 
   public currentUser = computed( () => this._currentUser );
-  public AuthStatus = computed( () => this._authStatus );
+  public authStatus = computed( () => this._authStatus );
 
   constructor() { }
 
@@ -32,7 +32,8 @@ export class AuthService {
           this._authStatus.set( AuthStatus.authenticated );
           localStorage.setItem( 'token', token );
         }),
-        map( () => true )
+        map( () => true ),
+        catchError( err => throwError( () => err.error.message ))
       );
 
   }
