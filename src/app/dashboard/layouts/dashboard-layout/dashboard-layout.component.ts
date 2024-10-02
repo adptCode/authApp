@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 
@@ -12,10 +12,10 @@ import { CommonModule } from '@angular/common';
 export class DashboardLayoutComponent {
 
   private authService = inject( AuthService );
-  // public user = computed( () => this.authService.currentUser() );
+  public user = computed( () => this.authService.currentUser() );
 
-  get user() {
-    return this.authService.currentUser();
-  }
+  // get user() {
+  //   return this.authService.currentUser();
+  // }
 
 }
